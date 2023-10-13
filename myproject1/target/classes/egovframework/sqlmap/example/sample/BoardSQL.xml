@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="board1_space">
+
+	<typeAlias  alias="egovMap" type="org.egovframe.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="searchVO" type="egovframework.example.sample.service.SampleDefaultVO"/>
+	<typeAlias  alias="boardVO" type="egov.service.BoardVO"/>
+
+	<insert id="boardDAO.insertBoard">
+		INSERT INTO board1(unq,title,pass,name,content,rdate)
+		VALUES(board1_seq.nextval,#title#,#pass#,#name#,#content#,sysdate)
+	</insert>
+	
+	<select id="boardDAO.selectBoardList" resultClass="egovMap">
+		SELECT   UNQ
+				,TITLE
+				,NAME
+				,HITS
+				,RDATE 
+		FROM BOARD1
+		ORDER BY UNQ DESC
+	</select>
+	
+	<select id="boardDAO.selectBoardTotal" resultClass="int">
+	
+	   SELECT COUNT(*) FROM BOARD1
+	
+	</select>
+	
+	<select id="boardDAO.selectBoardDetail" resultClass="boardVO">
+	
+		SELECT 
+		      UNQ
+		      ,TITLE
+		      ,NAME
+		      ,CONTENT
+		      ,TO_CHAR(RDATE,'yyyy-mm-dd') RDATE
+		      ,HITS 
+		      FROM BOARD1
+			WHERE UNQ = #unq#
+	
+	</select>
+	
+	<update id="boardDAO.updateBoardHits">
+	
+		UPDATE board1 SET hits=hits+1 WHERE unq = #unq#
+	
+	</update>
+	
+	<select id="boardDAO.selectBoardPass" resultClass="int">
+	
+		SELECT COUNT(*) FROM BOARD1 WHERE UNQ=#unq# AND PASS=#pass#
+	
+	</select>
+	
+	<select id="boardDAO.deleteBoard">
+	
+		DELETE FROM BOARD1 WHERE UNQ=#unq#
+	
+	</select>
+
+</sqlMap>
+
+
+
